@@ -3,6 +3,9 @@
 qemu_git="https://github.com/qemu/qemu.git"
 qemu_branch="v7.2.0"
 qemu_dir="$(pwd)/qemu-comp"
+patch_url="https://patchwork.kernel.org/series/710627/mbox/"
+patch_file="glibc236.patch"
+glibc_version=$(ldd --version | grep -oE '[0-9]+\.[0-9]+')
 
 function main()
 {
@@ -46,6 +49,12 @@ function qemu_compile()
   sed -i "s/KVMKVMKVM\\\\0\\\\0\\\\0/$cpu_brand/"                                           $qemu_dir/include/standard-headers/asm-x86/kvm_para.h
   sed -i "s/KVMKVMKVM\\\\0\\\\0\\\\0/$cpu_brand/"                                           $qemu_dir/target/i386/kvm/kvm.c
   sed -i "s/\"bochs\"/\"$qemu_motherboard_bios_vendor\"/"                                   $qemu_dir/block/bochs.c
+
+  if [[ "$glibc_version" > "2.35" ]]; then
+    echo "glibc version higher than 2.35, applying patches..."
+    wget "$patch_url" -O "$patch_file"
+    git apply "$patch_file"
+  fi
 
   ./configure --enable-spice --disable-werror
   make -j$(nproc)
