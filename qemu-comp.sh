@@ -5,6 +5,8 @@ qemu_branch="v7.2.0"
 qemu_dir="$(pwd)/qemu-comp"
 patch_url="https://patchwork.kernel.org/series/710627/mbox/"
 patch_file="glibc236.patch"
+keymap_patch_url="https://aur.archlinux.org/cgit/aur.git/plain/keymap.patch?h=qemu-git"
+keymap_patch_file="keymap.patch"
 glibc_version=$(ldd --version | grep -oE '[0-9]+\.[0-9]+')
 
 function main()
@@ -55,6 +57,9 @@ function qemu_compile()
     wget "$patch_url" -O "$patch_file"
     git apply "$patch_file"
   fi
+
+  wget "$keymap_patch_url" -O "$keymap_patch_file"
+  git apply "$keymap_patch_file"
 
   ./configure --enable-spice --disable-werror
   make -j$(nproc)
