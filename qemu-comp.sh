@@ -5,7 +5,7 @@ qemu_branch="v7.2.0"
 qemu_dir="$(pwd)/qemu-comp"
 patch_url="https://patchwork.kernel.org/series/710627/mbox/"
 patch_file="glibc236.patch"
-keymap_patch_url="https://aur.archlinux.org/cgit/aur.git/plain/keymap.patch?h=qemu-git"
+keymap_patch_url="https://pastebin.com/raw/jWi1UA4z"
 keymap_patch_file="keymap.patch"
 glibc_version=$(ldd --version | grep -oE '[0-9]+\.[0-9]+')
 
